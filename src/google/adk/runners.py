@@ -244,6 +244,9 @@ class Runner:
           async for event in agen:
             yield event
 
+        if self.memory_service:
+          await self.memory_service.add_session_to_memory(session)
+
     async with Aclosing(_run_with_trace(new_message)) as agen:
       async for event in agen:
         yield event
