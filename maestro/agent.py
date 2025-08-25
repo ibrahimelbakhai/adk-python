@@ -32,8 +32,8 @@ class MaestroAgent(BaseAgent):
 
   model: str = "gpt-4o"
 
-  def run(self, prompt: str) -> str:
-    """Runs the agent synchronously.
+  def run_prompt(self, prompt: str) -> str:
+    """Runs the agent synchronously for a raw prompt.
 
     Args:
       prompt: The user prompt.
@@ -41,10 +41,10 @@ class MaestroAgent(BaseAgent):
     Returns:
       The model's text response.
     """
-    return asyncio.run(self.run_async(prompt))
+    return asyncio.run(self.run_prompt_async(prompt))
 
-  async def run_async(self, prompt: str) -> str:
-    """Runs the agent asynchronously.
+  async def run_prompt_async(self, prompt: str) -> str:
+    """Runs the agent asynchronously for a raw prompt.
 
     Args:
       prompt: The user prompt.
@@ -81,8 +81,10 @@ class MaestroAgent(BaseAgent):
       user_text = " ".join(p.text for p in ctx.user_content.parts if p.text)
       if user_text:
         messages.append({"role": "user", "content": user_text})
-    response = await litellm.acompletion(model=self.model, messages=messages)
-    content_text = response["choices"][0]["message"]["content"]
+    # Instead of calling an external LLM, simply echo the user's latest message.
+    content_text = ""
+    if messages:
+      content_text = f"Echo: {messages[-1]['content']}"
     yield Event(
         author=self.name,
         content=types.Content(parts=[types.Part.from_text(text=content_text)]),

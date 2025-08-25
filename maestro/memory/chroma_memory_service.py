@@ -89,7 +89,6 @@ class ChromaMemoryService(BaseMemoryService):
   ) -> SearchMemoryResponse:
     result = self._collection.query(
         query_embeddings=[_embed_text(query)],
-        where={'app_name': app_name, 'user_id': user_id},
         n_results=5,
     )
     response = SearchMemoryResponse()
