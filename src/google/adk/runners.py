@@ -42,7 +42,7 @@ from .events.event import Event
 from .events.event import EventActions
 from .flows.llm_flows.functions import find_matching_function_call
 from .memory.base_memory_service import BaseMemoryService
-from .memory.in_memory_memory_service import InMemoryMemoryService
+from maestro.memory.chroma_memory_service import ChromaMemoryService
 from .platform.thread import create_thread
 from .plugins.base_plugin import BasePlugin
 from .plugins.plugin_manager import PluginManager
@@ -675,5 +675,5 @@ class InMemoryRunner(Runner):
         artifact_service=InMemoryArtifactService(),
         plugins=plugins,
         session_service=self._in_memory_session_service,
-        memory_service=InMemoryMemoryService(),
+        memory_service=ChromaMemoryService(),
     )
